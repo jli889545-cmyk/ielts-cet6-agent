@@ -76,7 +76,75 @@ document.addEventListener('change',e=>{if(e.target.dataset.task){state.tasks[e.t
 function show(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');else document.querySelectorAll('.nav')[0].classList.add('active');render()}
 function learnWord(i){if(!state.words.includes(vocab[i][0]))state.words.push(vocab[i][0]);save();render()}
 function startSpeaking(){show('agent');document.getElementById('chat').innerHTML+=`<div class="chat"><div class="bubble">今日 IELTS Part 2 题目：Describe a useful skill you learned. 请准备 1 分钟，然后用 1–2 分钟回答。回答后把你的答案发给我，我会按 Fluency、Vocabulary、Grammar、Pronunciation 四项给你反馈。</div></div>`}
-function send(){let x=document.getElementById('chatInput'),v=x.value.trim();if(!v)return;document.getElementById('chat').innerHTML+=`<div class="chat me"><div class="bubble">${escapeHtml(v)}</div></div>`;let r='收到。我会把这次学习记录作为你的进度参考。你可以继续告诉我：目标考试、剩余时间、今天可用时间，或直接发你的英语答案。';if(/30|半小时/.test(v))r='如果只有 30 分钟：10 分钟词汇 + 10 分钟听力 + 10 分钟口语。完成后勾选任务，我会据此调整下一次安排。';document.getElementById('chat').innerHTML+=`<div class="chat"><div class="bubble">${r}</div></div>`;x.value=''}
+async function send(){
+  const x = document.getElementById('chatInput');
+  const v = x.value.trim();
+
+  if(!v) return;
+
+  // 显示用户消息
+  document.getElementById('chat').innerHTML += `
+    <div class="chat me">
+      <div class="bubble">${escapeHtml(v)}</div>
+    </div>
+  `;
+
+  // 清空输入框
+  x.value = '';
+
+  // 显示“正在思考”
+  const loadingId = 'loading-' + Date.now();
+
+  document.getElementById('chat').innerHTML += `
+    <div class="chat" id="${loadingId}">
+      <div class="bubble">正在思考……</div>
+    </div>
+  `;
+
+  try {
+    // 真正调用后端 API
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: v
+      })
+    });
+
+    const data = await response.json();
+
+    // 删除“正在思考”
+    document.getElementById(loadingId)?.remove();
+
+    if(!response.ok){
+      throw new Error(data.error || 'AI 请求失败');
+    }
+
+    // 显示 AI 回复
+    const answer = data.answer || 'AI 没有返回内容';
+
+    document.getElementById('chat').innerHTML += `
+      <div class="chat">
+        <div class="bubble">${escapeHtml(answer).replace(/\n/g, '<br>')}</div>
+      </div>
+    `;
+
+  } catch(error) {
+
+    // 删除“正在思考”
+    document.getElementById(loadingId)?.remove();
+
+    document.getElementById('chat').innerHTML += `
+      <div class="chat">
+        <div class="bubble">
+          ⚠️ AI 暂时无法回复：${escapeHtml(error.message)}
+        </div>
+      </div>
+    `;
+  }
+}
 function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 render();
 </script>
