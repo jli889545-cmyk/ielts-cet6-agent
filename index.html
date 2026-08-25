@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6d5dfc">
+<title>IELTS · CET-6 学习 Agent</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--text:#202124;--muted:#73778a;--primary:#6d5dfc;--primary2:#8c7cff;--line:#e9eaf1;--ok:#21a179;--danger:#ef6b73}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#f7f5ff 0,#f7f8fc 35%,#f5f6fa 100%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text)}
+.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:88px}.top{padding:28px 20px 16px}.brand{font-size:13px;color:var(--primary);font-weight:800;letter-spacing:.08em}.title{font-size:28px;font-weight:850;margin:7px 0}.subtitle{color:var(--muted);font-size:14px}.hero{margin:10px 20px 18px;padding:20px;border-radius:24px;background:linear-gradient(135deg,#6d5dfc,#8d7dff);color:#fff;box-shadow:0 14px 35px #6d5dfc35}.hero small{opacity:.8}.hero h2{margin:6px 0 14px;font-size:22px}.progress{height:8px;background:#ffffff35;border-radius:10px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:#fff;border-radius:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.stat{background:#ffffff18;border:1px solid #ffffff25;border-radius:16px;padding:11px}.stat b{display:block;font-size:20px}.section{padding:0 20px;margin-top:20px}.section h3{margin:0 0 12px;font-size:17px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 8px 24px #1f23400a}.card h4{margin:0 0 6px}.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}.pill{display:inline-block;font-size:11px;padding:5px 8px;border-radius:99px;background:#f0eeff;color:var(--primary);margin-bottom:9px}.task{display:flex;gap:12px;align-items:center}.task input{width:20px;height:20px;accent-color:var(--primary)}.task span{flex:1}.word{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}button{border:0;border-radius:13px;padding:10px 13px;background:#f0eeff;color:var(--primary);font-weight:750;cursor:pointer}button.primary{background:var(--primary);color:white}.chat{display:flex;gap:10px;margin-bottom:10px}.bubble{padding:11px 13px;background:#fff;border:1px solid var(--line);border-radius:16px;max-width:88%;line-height:1.55;font-size:14px}.me{justify-content:flex-end}.me .bubble{background:#ece9ff;border-color:#ddd8ff}.inputrow{display:flex;gap:8px;margin-top:12px}.inputrow input{flex:1;border:1px solid var(--line);border-radius:14px;padding:13px;font-size:14px;outline:none}.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);background:#ffffffeb;backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:9px 10px calc(9px + env(safe-area-inset-bottom));z-index:5}.nav{background:transparent;color:var(--muted);padding:7px 3px}.nav.active{color:var(--primary)}.nav b{display:block;font-size:19px}.nav span{font-size:11px}.page{display:none}.page.active{display:block}.notice{font-size:12px;color:var(--muted);line-height:1.6;background:#fff;padding:12px;border-radius:14px;border:1px solid var(--line)}
+@media(min-width:600px){.top{padding-top:42px}.title{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="brand">PERSONAL LEARNING AGENT</div><div class="title">IELTS · CET-6 学习 Agent</div><div class="subtitle">每天一点点，自动记录你的学习轨迹。</div></header>
+
+<main id="home" class="page active">
+<section class="hero"><small>今日学习进度</small><h2 id="heroText">准备开始今天的学习</h2><div class="progress"><i id="bar"></i></div><div class="stats"><div class="stat"><b id="done">0</b><small>今日完成</small></div><div class="stat"><b id="streak">0</b><small>连续学习</small></div><div class="stat"><b id="words">0</b><small>词汇累计</small></div></div></section>
+<section class="section"><h3>今日任务</h3><div class="card" id="tasks"></div></section>
+<section class="section"><h3>快速开始</h3><div class="grid">
+<div class="card"><span class="pill">IELTS</span><h4>口语训练</h4><p>Part 2 · 1 分钟即兴回答</p><button class="primary" onclick="startSpeaking()">开始</button></div>
+<div class="card"><span class="pill">CET-6</span><h4>六级词汇</h4><p>今日 10 个高频词</p><button onclick="show('wordsPage')">学习</button></div>
+</div></section>
+</main>
+
+<section id="plan" class="page">
+<div class="section"><h3>学习计划</h3><div class="card">
+<div class="task"><input type="checkbox" data-task="IELTS 听力 20 分钟"><span>IELTS 听力 20 分钟</span></div><hr>
+<div class="task"><input type="checkbox" data-task="CET-6 高频词 10 个"><span>CET-6 高频词 10 个</span></div><hr>
+<div class="task"><input type="checkbox" data-task="IELTS 口语 Part 2"><span>IELTS 口语 Part 2</span></div><hr>
+<div class="task"><input type="checkbox" data-task="CET-6 阅读 1 篇"><span>CET-6 阅读 1 篇</span></div>
+</div></div>
+<div class="section"><div class="notice">建议：不要一开始追求“每天学很多”。Agent 会优先帮你保持连续性，再逐渐提高难度。</div></div>
+</section>
+
+<section id="wordsPage" class="page">
+<div class="section"><h3>词汇库</h3><div class="card" id="wordList"></div></div>
+</section>
+
+<section id="agent" class="page">
+<div class="section"><h3>学习 Agent</h3><div id="chat">
+<div class="chat"><div class="bubble">你好！我是你的 IELTS + CET-6 学习 Agent。告诉我你今天想练什么，我会根据你的记录给你安排下一步。</div></div>
+</div>
+<div class="inputrow"><input id="chatInput" placeholder="例如：我今天只有 30 分钟"><button class="primary" onclick="send()">发送</button></div></div>
+</section>
+
+<nav class="bottom">
+<button class="nav active" onclick="show('home',this)"><b>⌂</b><span>首页</span></button>
+<button class="nav" onclick="show('plan',this)"><b>✓</b><span>计划</span></button>
+<button class="nav" onclick="show('wordsPage',this)"><b>A</b><span>词汇</span></button>
+<button class="nav" onclick="show('agent',this)"><b>✦</b><span>Agent</span></button>
+</nav>
+</div>
+
+<script>
+const KEY='study_agent_v1';
+let state=JSON.parse(localStorage.getItem(KEY)||'{"tasks":{},"words":[],"streak":0,"last":""}');
+const vocab=[
+['sustainable','adj. 可持续的'],['substantial','adj. 大量的；实质的'],['deteriorate','v. 恶化'],['controversial','adj. 有争议的'],['allocate','v. 分配'],['inevitable','adj. 不可避免的'],['contemporary','adj. 当代的'],['enhance','v. 提高；增强'],['perspective','n. 观点；视角'],['implement','v. 实施']
+];
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function today(){return new Date().toISOString().slice(0,10)}
+function render(){
+ const checks=[...document.querySelectorAll('[data-task]')];
+ checks.forEach(c=>c.checked=!!state.tasks[c.dataset.task]);
+ const done=checks.filter(c=>c.checked).length; document.getElementById('done').textContent=done;
+ document.getElementById('bar').style.width=(done/4*100)+'%';
+ document.getElementById('heroText').textContent=done===4?'今日任务全部完成 🎉':`完成 ${done}/4 项，继续保持`;
+ document.getElementById('streak').textContent=state.streak;
+ document.getElementById('words').textContent=state.words.length;
+ document.getElementById('wordList').innerHTML=vocab.map((w,i)=>`<div class="word"><span><b>${w[0]}</b><br><small>${w[1]}</small></span><button onclick="learnWord(${i})">${state.words.includes(w[0])?'已掌握':'学习'}</button></div>`).join('');
+}
+document.addEventListener('change',e=>{if(e.target.dataset.task){state.tasks[e.target.dataset.task]=e.target.checked;if(e.target.checked && state.last!==today()){state.streak++;state.last=today()}save();render()}});
+function show(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');else document.querySelectorAll('.nav')[0].classList.add('active');render()}
+function learnWord(i){if(!state.words.includes(vocab[i][0]))state.words.push(vocab[i][0]);save();render()}
+function startSpeaking(){show('agent');document.getElementById('chat').innerHTML+=`<div class="chat"><div class="bubble">今日 IELTS Part 2 题目：Describe a useful skill you learned. 请准备 1 分钟，然后用 1–2 分钟回答。回答后把你的答案发给我，我会按 Fluency、Vocabulary、Grammar、Pronunciation 四项给你反馈。</div></div>`}
+function send(){let x=document.getElementById('chatInput'),v=x.value.trim();if(!v)return;document.getElementById('chat').innerHTML+=`<div class="chat me"><div class="bubble">${escapeHtml(v)}</div></div>`;let r='收到。我会把这次学习记录作为你的进度参考。你可以继续告诉我：目标考试、剩余时间、今天可用时间，或直接发你的英语答案。';if(/30|半小时/.test(v))r='如果只有 30 分钟：10 分钟词汇 + 10 分钟听力 + 10 分钟口语。完成后勾选任务，我会据此调整下一次安排。';document.getElementById('chat').innerHTML+=`<div class="chat"><div class="bubble">${r}</div></div>`;x.value=''}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+render();
+</script>
+</body></html>
